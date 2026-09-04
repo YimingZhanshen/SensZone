@@ -1,4 +1,4 @@
-# SensZone（灵敏域）v1.2
+# SensZone（灵敏域）v1.3
 
 基于运动学分析与 Fitts 定律的 FPS 灵敏度区间查找器。任务范式与统计口径对齐 NVIDIA 论文《Mouse Sensitivity Effects in First-Person Targeting Tasks》（Boudaoud et al.）。
 
