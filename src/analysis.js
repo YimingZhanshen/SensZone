@@ -64,7 +64,7 @@
       const n = recs.length;
       const hitRate = n ? cd.hitsRaw.length / n : 0;
 
-      let meanMT = null, sdMT = null, meanTp = null, meanSignedErr = null, overshootRate = null, meanSubmov = null, meanId = null, adjMT = null, adjSE = null, meanSwip = null;
+      let meanMT = null, sdMT = null, meanTp = null, meanSignedErr = null, overshootRate = null, meanSubmov = null, meanId = null, adjMT = null, adjSE = null, meanSwip = null, meanVerify = null, meanPause = null;
       if (hits.length) {
         const mts = hits.map(r => r.mtMs);
         meanMT = SZ.stats.mean(mts);
@@ -76,6 +76,10 @@
         meanId = SZ.stats.mean(hits.map(r => r.target.idBits));
         const swips = hits.map(r => r.swipiness).filter(v => v != null);
         meanSwip = swips.length ? SZ.stats.mean(swips) : null;
+        const verifies = hits.map(r => r.verificationMs).filter(v => v != null);
+        meanVerify = verifies.length ? SZ.stats.mean(verifies) : null;
+        const pauses = hits.map(r => r.pauseMs).filter(v => v != null);
+        meanPause = pauses.length ? SZ.stats.mean(pauses) : null;
         const adj = hits.map(r => r.mtMs - beta * (r.target.idBits - ID_REF));
         adjMT = SZ.stats.mean(adj);
         const ids = hits.map(r => r.target.idBits);
@@ -99,6 +103,8 @@
         overshootRate,
         meanSubmov,
         meanSwip,
+        meanVerify,
+        meanPause,
         meanId,
         adjMT,
         adjSE,

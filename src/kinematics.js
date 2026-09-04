@@ -168,10 +168,16 @@
     const fEl = filtfilt(uni.el, chain);
     const v = velocitySeries(fAz, fEl, 1000 / FS);
     const segs = segmentSubmovements(uni.t, v, SEG);
+    let pauseMs = 0;
+    for (let i = 1; i < segs.length; i++) {
+      pauseMs += segs[i].start - segs[i - 1].end;
+    }
     return {
       count: segs.length,
       firstPeakVel: segs.length ? segs[0].peak : 0,
       firstPeakT: segs.length ? segs[0].peakT : 0,
+      lastEndT: segs.length ? segs[segs.length - 1].end : 0,
+      pauseMs,
       peakVel: v.length ? Math.max.apply(null, Array.from(v)) : 0
     };
   }

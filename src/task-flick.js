@@ -61,6 +61,8 @@
 
       const kin = trial.kind === 'warmup' ? null : SZ.kinematics.summarizeTrialTrace(trial.trace);
       const swipiness = (hit && kin && kin.firstPeakT > 0 && mt > 0) ? (mt / kin.firstPeakT) / 2 : null;
+      const verificationMs = (hit && kin && kin.count > 0) ? Math.max(0, mt - kin.lastEndT) : null;
+      const pauseMs = (hit && kin) ? kin.pauseMs : null;
       const record = {
         condId: spec.condId,
         trialIdx: spec.trialIdx,
@@ -81,6 +83,8 @@
         submovements: kin ? kin.count : null,
         firstPeakVel: kin ? kin.firstPeakVel : null,
         swipiness,
+        verificationMs,
+        pauseMs,
         waitMs: trial.started ? trial.t0 - trial.waitStart : null
       };
 

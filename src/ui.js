@@ -421,6 +421,18 @@
         table(rows.join(''), ['cm/360', t('hitRateShort'), t('adjMtShort') + ' ms*', t('sdShort') + ' ms', t('tpShort'), t('subShort'), t('swipShort'), t('overShort'), '']) +
         '<div class="muted">* ' + t('adjNote') + '</div>' + styleLine +
         '<div class="muted">' + t('swipNote') + '</div></div>';
+
+      const hasPhases = report.conds.some(c => c.meanVerify != null);
+      if (hasPhases) {
+        const prows = report.conds.map(c =>
+          '<tr><td>' + fmt(c.cm360, 1) + '</td><td>' +
+          (c.adjMT != null ? Math.round(c.adjMT) : '-') + '</td><td>' +
+          (c.meanVerify != null ? Math.round(c.meanVerify) : '-') + '</td><td>' +
+          (c.meanPause != null ? Math.round(c.meanPause) : '-') + '</td></tr>');
+        html += '<div class="card"><div class="card-title">' + t('phaseTitle') + '</div>' +
+          table(prows.join(''), ['cm/360', t('adjMtShort') + ' ms*', t('verifyShort') + ' ms', t('pauseShort') + ' ms']) +
+          '<div class="muted">' + t('phaseNote') + '</div></div>';
+      }
     }
 
     if (report.track) {

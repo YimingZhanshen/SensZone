@@ -95,6 +95,8 @@ const K = SZ.kinematics;
   ok(sum && sum.count === 2, 'submovement count == 2, got ' + (sum && sum.count));
   ok(sum && sum.firstPeakVel > 60, 'first submovement peak vel > 60 deg/s, got ' + (sum && sum.firstPeakVel.toFixed(1)));
   ok(sum && sum.firstPeakT >= 220 && sum.firstPeakT <= 340, 'first submovement peak time in flick window, got ' + (sum && sum.firstPeakT.toFixed(0)));
+  ok(sum && sum.lastEndT >= 580 && sum.lastEndT <= 660, 'last submovement end time sane, got ' + (sum && sum.lastEndT.toFixed(0)));
+  ok(sum && sum.pauseMs >= 30 && sum.pauseMs <= 140, 'pause time == inter-submovement gap, got ' + (sum && sum.pauseMs.toFixed(0)));
 })();
 
 (function singleMoveTest() {
