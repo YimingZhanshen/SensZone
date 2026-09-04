@@ -2,6 +2,9 @@
 *.pdf
 *.epub
 
+# 参考项目（不入库、不部署）
+PSA-Source-Engine/
+
 # 本地测试导出（个人数据）
 senszone-report-*.json
 
