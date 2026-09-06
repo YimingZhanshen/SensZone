@@ -77,6 +77,8 @@
 
 ## 开发
 
+欢迎贡献！流程与约定见 [CONTRIBUTING.md](CONTRIBUTING.md)（PR 为首选贡献方式，三关全绿：lint + smoke + flow）。
+
 ```
 src/
   math.js        灵敏度换算 / Fitts ID / 球面几何 / 种子随机
