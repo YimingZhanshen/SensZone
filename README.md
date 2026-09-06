@@ -1,4 +1,4 @@
-# SensZone（灵敏域）v1.4
+# SensZone（灵敏域）v1.4.1
 
 [![CI](https://github.com/YimingZhanshen/SensZone/actions/workflows/ci.yml/badge.svg)](https://github.com/YimingZhanshen/SensZone/actions/workflows/ci.yml)
 

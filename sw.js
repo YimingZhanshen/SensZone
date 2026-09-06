@@ -7,7 +7,7 @@
  *     发版后 ?v= 变化即自然命中新资源
  *   - 跨域请求一律不缓存
  */
-const CACHE = 'senszone-v1.4';
+const CACHE = 'senszone-v1.4.1';
 const PRECACHE = ['/', '/index.html'];
 
 self.addEventListener('install', (event) => {
