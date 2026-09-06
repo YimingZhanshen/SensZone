@@ -1,6 +1,6 @@
 /*
  * SensZone Service Worker（手写，零依赖）
- * 缓存版本号需与 src/version.js 的 SZ.VERSION 手动同步（当前对应 v1.4）。
+ * 缓存版本号需与 src/version.js 的 SZ.VERSION 手动同步（当前对应 v1.4.1）。
  * 策略：
  *   - 页面导航：network-first，离线回退已缓存的 index.html
  *   - src/*.js 与 icons/*：cache-first，按完整 URL（含 ?v=）作为缓存键，
