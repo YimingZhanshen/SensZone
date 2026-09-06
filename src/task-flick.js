@@ -9,7 +9,6 @@
   const ARM_VEL = 4;
   const ONSET_VEL = 15;
   const ARM_DEADLINE_MS = 600;
-  const REF_DIAM = 0.57;
 
   function createFlickTask(hooks) {
     let phase = 'idle';
@@ -30,7 +29,7 @@
         lastSample: 0,
         waitStart: performance.now(),
         startAz: 0,
-        startEl: 0
+        startEl: 0,
       };
       phase = 'settle';
       armed = false;
@@ -60,9 +59,9 @@
       }
 
       const kin = trial.kind === 'warmup' ? null : SZ.kinematics.summarizeTrialTrace(trial.trace);
-      const swipiness = (hit && kin && kin.firstPeakT > 0 && mt > 0) ? (mt / kin.firstPeakT) / 2 : null;
-      const verificationMs = (hit && kin && kin.count > 0) ? Math.max(0, mt - kin.lastEndT) : null;
-      const pauseMs = (hit && kin) ? kin.pauseMs : null;
+      const swipiness = hit && kin && kin.firstPeakT > 0 && mt > 0 ? mt / kin.firstPeakT / 2 : null;
+      const verificationMs = hit && kin && kin.count > 0 ? Math.max(0, mt - kin.lastEndT) : null;
+      const pauseMs = hit && kin ? kin.pauseMs : null;
       const record = {
         condId: spec.condId,
         trialIdx: spec.trialIdx,
@@ -72,12 +71,20 @@
           widthDeg: spec.widthDeg,
           azDeg: spec.az,
           elDeg: spec.el,
-          idBits: spec.idBits
+          idBits: spec.idBits,
         },
         mtMs: hit ? mt : null,
         effMs: hit ? mt : TIMEOUT_MS,
         hit,
-        missReason: hit ? null : (idle ? 'idle' : (clicked ? 'miss' : (trial.started ? 'timeout' : 'nostart'))),
+        missReason: hit
+          ? null
+          : idle
+            ? 'idle'
+            : clicked
+              ? 'miss'
+              : trial.started
+                ? 'timeout'
+                : 'nostart',
         endpointErrDeg: d,
         signedErrDeg: signed,
         submovements: kin ? kin.count : null,
@@ -85,7 +92,7 @@
         swipiness,
         verificationMs,
         pauseMs,
-        waitMs: trial.started ? trial.t0 - trial.waitStart : null
+        waitMs: trial.started ? trial.t0 - trial.waitStart : null,
       };
 
       phase = 'done';
@@ -95,15 +102,15 @@
         az: spec.az,
         el: spec.el,
         rad: spec.radDeg,
-        t0: now
+        t0: now,
       });
-      hooks.onFeedback(hit ? 'hit' : (idle ? 'idle' : 'miss'), hit ? mt : null);
+      hooks.onFeedback(hit ? 'hit' : idle ? 'idle' : 'miss', hit ? mt : null);
       hooks.onTrialComplete(record, trial.kind);
       hooks.onHud({ phase, spec, kind: trial.kind });
     }
 
     function signedEndpointError(startAz, startEl, spec, cam) {
-      const cosT = Math.cos(spec.el * Math.PI / 180);
+      const cosT = Math.cos((spec.el * Math.PI) / 180);
       const ux = SZ.math.wrap180(startAz - spec.az) * cosT;
       const uy = startEl - spec.el;
       const cx = SZ.math.wrap180(cam.az - spec.az) * cosT;
@@ -131,7 +138,13 @@
             } else {
               const d = SZ.math.greatCircleDeg(cam.az, cam.el, trial.spec.az, trial.spec.el);
               if (d <= trial.spec.radDeg) {
-                flashes.push({ type: 'deny', az: trial.spec.az, el: trial.spec.el, rad: trial.spec.radDeg, t0: now });
+                flashes.push({
+                  type: 'deny',
+                  az: trial.spec.az,
+                  el: trial.spec.el,
+                  rad: trial.spec.radDeg,
+                  t0: now,
+                });
                 hooks.onFeedback('skip', null);
                 if (hooks.onTrialAborted) hooks.onTrialAborted();
                 lastCam = null;
@@ -167,7 +180,7 @@
         phase = 'iti';
         hooks.onNeedNextTrial();
       }
-      flashes = flashes.filter(f => now - f.t0 <= 320);
+      flashes = flashes.filter((f) => now - f.t0 <= 320);
     }
 
     const SCENE = { ref: null, test: null, flashes };
@@ -202,16 +215,40 @@
       if (phaseEnd) phaseEnd += ms;
     }
 
-    function isFlight() { return phase === 'flight'; }
-    function getPhase() { return phase; }
+    function isFlight() {
+      return phase === 'flight';
+    }
+    function getPhase() {
+      return phase;
+    }
     function getFlightProgress(now) {
       if (phase !== 'flight' || !trial || !trial.started) return 0;
       return Math.min(1, (now - trial.t0) / TIMEOUT_MS);
     }
-    function reset() { phase = 'idle'; trial = null; flashes = []; lastCam = null; }
+    function reset() {
+      phase = 'idle';
+      trial = null;
+      flashes = [];
+      lastCam = null;
+    }
 
-    return { startTrial, onShift, onClick, update, getScene, isFlight, getPhase, getFlightProgress, reset };
+    return {
+      startTrial,
+      onShift,
+      onClick,
+      update,
+      getScene,
+      isFlight,
+      getPhase,
+      getFlightProgress,
+      reset,
+      addPauseTime,
+    };
   }
 
   SZ.taskFlick = { createFlickTask, TIMEOUT_MS };
-})(typeof window !== 'undefined' ? (window.SZ = window.SZ || {}) : (globalThis.SZ = globalThis.SZ || {}));
+})(
+  typeof window !== 'undefined'
+    ? (window.SZ = window.SZ || {})
+    : (globalThis.SZ = globalThis.SZ || {}),
+);

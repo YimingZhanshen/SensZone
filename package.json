@@ -1,0 +1,18 @@
+{
+  "name": "senszone",
+  "private": true,
+  "version": "1.4.0",
+  "description": "SensZone（灵敏域）— FPS 灵敏度区间查找器（纯前端，零运行时依赖）",
+  "scripts": {
+    "lint": "eslint . && prettier --check \"src/**/*.js\" \"test/*.cjs\" \"scripts/*.mjs\" \"index.html\"",
+    "lint:fix": "eslint . --fix && prettier --write \"src/**/*.js\" \"test/*.cjs\" \"scripts/*.mjs\" \"index.html\"",
+    "test": "node test/smoke.cjs && node test/flow.cjs",
+    "bump": "node scripts/bump-version.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6"
+  }
+}

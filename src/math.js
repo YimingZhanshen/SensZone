@@ -9,7 +9,7 @@
     apex: { name: 'Apex Legends', yaw: 0.022, fovModel: 'vertical-fixed-90', defaultFov: 104 },
     valorant: { name: 'Valorant', yaw: 0.07, fovModel: 'horizontal-103', defaultFov: 103 },
     overwatch: { name: 'Overwatch 2', yaw: 0.0066, fovModel: 'horizontal-103', defaultFov: 103 },
-    custom: { name: 'Custom', yaw: 0.022, fovModel: 'custom', defaultFov: 90 }
+    custom: { name: 'Custom', yaw: 0.022, fovModel: 'custom', defaultFov: 90 },
   };
 
   function cm360(yaw, sens, dpi) {
@@ -50,7 +50,10 @@
   }
 
   function greatCircleDeg(az1, el1, az2, el2) {
-    const a1 = az1 * RAD, e1 = el1 * RAD, a2 = az2 * RAD, e2 = el2 * RAD;
+    const a1 = az1 * RAD,
+      e1 = el1 * RAD,
+      a2 = az2 * RAD,
+      e2 = el2 * RAD;
     const c = Math.sin(e1) * Math.sin(e2) + Math.cos(e1) * Math.cos(e2) * Math.cos(a1 - a2);
     return Math.acos(Math.min(1, Math.max(-1, c))) * DEG;
   }
@@ -78,7 +81,7 @@
     let a = seed >>> 0;
     return function () {
       a |= 0;
-      a = (a + 0x6D2B79F5) | 0;
+      a = (a + 0x6d2b79f5) | 0;
       let t = Math.imul(a ^ (a >>> 15), 1 | a);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -89,7 +92,9 @@
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
-      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+      const tmp = a[i];
+      a[i] = a[j];
+      a[j] = tmp;
     }
     return a;
   }
@@ -106,9 +111,26 @@
   }
 
   SZ.math = {
-    GAMES, RAD, DEG,
-    cm360, sensFromCm360, degPerMm, cmFromDegPerMm, edpi,
-    gameFov, greatCircleDeg, wrap180, indexOfDifficulty, throughput,
-    clamp, mulberry32, shuffle, signedEndpointError
+    GAMES,
+    RAD,
+    DEG,
+    cm360,
+    sensFromCm360,
+    degPerMm,
+    cmFromDegPerMm,
+    edpi,
+    gameFov,
+    greatCircleDeg,
+    wrap180,
+    indexOfDifficulty,
+    throughput,
+    clamp,
+    mulberry32,
+    shuffle,
+    signedEndpointError,
   };
-})(typeof window !== 'undefined' ? (window.SZ = window.SZ || {}) : (globalThis.SZ = globalThis.SZ || {}));
+})(
+  typeof window !== 'undefined'
+    ? (window.SZ = window.SZ || {})
+    : (globalThis.SZ = globalThis.SZ || {}),
+);

@@ -25,13 +25,28 @@ function load(f) {
   eval(code);
 }
 
-['math.js', 'kinematics.js', 'stats.js', 'analysis.js', 'session.js', 'render.js', 'task-flick.js', 'task-track.js', 'ui.js'].forEach(load);
+[
+  'math.js',
+  'kinematics.js',
+  'stats.js',
+  'analysis.js',
+  'session.js',
+  'charts.js',
+  'render.js',
+  'task-flick.js',
+  'task-track.js',
+  'report-image.js',
+  'ui.js',
+].forEach(load);
 const SZ = globalThis.SZ;
 
 let failures = 0;
 function ok(cond, name) {
   if (cond) console.log('PASS ' + name);
-  else { console.log('FAIL ' + name); failures++; }
+  else {
+    console.log('FAIL ' + name);
+    failures++;
+  }
 }
 function near(a, b, eps, name) {
   ok(Math.abs(a - b) <= eps, name + ' [' + a + ' ~ ' + b + ']');
@@ -43,7 +58,7 @@ near(m.sensFromCm360(0.022, 800, 45.18), 1.15, 0.001, 'sens roundtrip');
 near(m.degPerMm(45.18), 0.797, 0.002, 'degPerMm');
 near(m.cmFromDegPerMm(0.797), 45.17, 0.05, 'cm roundtrip');
 near(m.indexOfDifficulty(7, 9.15), 0.821, 0.01, 'ID min (paper 0.83)');
-near(m.indexOfDifficulty(25.14, 0.57), 5.50, 0.02, 'ID max (paper 5.50)');
+near(m.indexOfDifficulty(25.14, 0.57), 5.5, 0.02, 'ID max (paper 5.50)');
 
 const f43 = m.gameFov('cs2', 4 / 3, 90);
 near(f43.vFov, 73.74, 0.02, 'cs2 vFOV 4:3 = 73.74');
@@ -66,10 +81,12 @@ near(fit.optimum(), 2, 0.01, 'quadFit optimum');
 const boot = s.bootstrapOptimum(
   Array.from({ length: 60 }, (_, i) => {
     const cond = Math.floor(i / 10);
-    const x = Math.log2(0.4) + cond * (Math.log2(1.6) - Math.log2(0.4)) / 5;
+    const x = Math.log2(0.4) + (cond * (Math.log2(1.6) - Math.log2(0.4))) / 5;
     return { x, y: 100 + 250 * (x - Math.log2(0.9)) ** 2 + (i % 7), cond };
   }),
-  300, m.mulberry32(42));
+  300,
+  m.mulberry32(42),
+);
 ok(boot.opt !== null, 'bootstrap opt not null');
 near(boot.opt, Math.log2(0.9), 0.2, 'bootstrap opt near truth');
 ok(boot.ci && boot.ci[0] < boot.ci[1], 'bootstrap ci ordered');
@@ -81,31 +98,45 @@ const K = SZ.kinematics;
   let t = 0;
   for (; t < 200; t += dt) tr.push({ t, az: 0, el: 0 });
   for (let u = 0; u <= 160; u += dt) {
-    const f = 0.5 - 0.5 * Math.cos(Math.PI * u / 160);
+    const f = 0.5 - 0.5 * Math.cos((Math.PI * u) / 160);
     tr.push({ t: 200 + u, az: 18 * f, el: 0 });
   }
   const t1 = 360;
   for (let u = 0; u < 120; u += dt) tr.push({ t: t1 + u, az: 18, el: 0 });
   for (let u = 0; u <= 120; u += dt) {
-    const f = 0.5 - 0.5 * Math.cos(Math.PI * u / 120);
+    const f = 0.5 - 0.5 * Math.cos((Math.PI * u) / 120);
     tr.push({ t: t1 + 120 + u, az: 18 + 2.5 * f, el: 0 });
   }
   for (let u = 0; u < 100; u += dt) tr.push({ t: t1 + 240 + u, az: 20.5, el: 0 });
   const sum = K.summarizeTrialTrace(tr);
   ok(sum && sum.count === 2, 'submovement count == 2, got ' + (sum && sum.count));
-  ok(sum && sum.firstPeakVel > 60, 'first submovement peak vel > 60 deg/s, got ' + (sum && sum.firstPeakVel.toFixed(1)));
-  ok(sum && sum.firstPeakT >= 220 && sum.firstPeakT <= 340, 'first submovement peak time in flick window, got ' + (sum && sum.firstPeakT.toFixed(0)));
-  ok(sum && sum.lastEndT >= 580 && sum.lastEndT <= 660, 'last submovement end time sane, got ' + (sum && sum.lastEndT.toFixed(0)));
-  ok(sum && sum.pauseMs >= 30 && sum.pauseMs <= 140, 'pause time == inter-submovement gap, got ' + (sum && sum.pauseMs.toFixed(0)));
+  ok(
+    sum && sum.firstPeakVel > 60,
+    'first submovement peak vel > 60 deg/s, got ' + (sum && sum.firstPeakVel.toFixed(1)),
+  );
+  ok(
+    sum && sum.firstPeakT >= 220 && sum.firstPeakT <= 340,
+    'first submovement peak time in flick window, got ' + (sum && sum.firstPeakT.toFixed(0)),
+  );
+  ok(
+    sum && sum.lastEndT >= 580 && sum.lastEndT <= 660,
+    'last submovement end time sane, got ' + (sum && sum.lastEndT.toFixed(0)),
+  );
+  ok(
+    sum && sum.pauseMs >= 30 && sum.pauseMs <= 140,
+    'pause time == inter-submovement gap, got ' + (sum && sum.pauseMs.toFixed(0)),
+  );
 })();
 
 (function singleMoveTest() {
   const tr = [];
   const dt = 1000 / 240;
   for (; t0() < 150;) tr.push({ t: t0(), az: 0, el: 0 });
-  function t0() { return tr.length * dt; }
+  function t0() {
+    return tr.length * dt;
+  }
   for (let u = 0; u <= 180; u += dt) {
-    const f = 0.5 - 0.5 * Math.cos(Math.PI * u / 180);
+    const f = 0.5 - 0.5 * Math.cos((Math.PI * u) / 180);
     tr.push({ t: 150 + u, az: 12 * f, el: 0 });
   }
   for (let u = 0; u < 120; u += dt) tr.push({ t: 330 + u, az: 12, el: 0 });
@@ -114,8 +145,15 @@ const K = SZ.kinematics;
 })();
 
 const settings = {
-  game: 'cs2', aspect: 4 / 3, customFov: 90, dpi: 800, sens: 1.15,
-  yaw: 0.022, trialsPerCond: 40, padWidthCm: 45, sessionId: 12345
+  game: 'cs2',
+  aspect: 4 / 3,
+  customFov: 90,
+  dpi: 800,
+  sens: 1.15,
+  yaw: 0.022,
+  trialsPerCond: 40,
+  padWidthCm: 45,
+  sessionId: 12345,
 };
 
 const conds = SZ.session.buildConditions(settings);
@@ -123,7 +161,10 @@ ok(conds.length === 6, '6 conditions');
 near(conds[3].cm360, 45.18, 0.05, 'anchor condition cm/360');
 const specA = SZ.session.makeTrialSpec(conds[0], 7);
 const specB = SZ.session.makeTrialSpec(conds[0], 7);
-ok(specA.az === specB.az && specA.el === specB.el && specA.widthDeg === specB.widthDeg, 'trial spec deterministic');
+ok(
+  specA.az === specB.az && specA.el === specB.el && specA.widthDeg === specB.widthDeg,
+  'trial spec deterministic',
+);
 ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idBits.toFixed(2));
 
 (function analysisTest() {
@@ -136,7 +177,10 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
       const x = Math.log2(c.dpm);
       let mt = 420 + 900 * (x - Math.log2(optDpm)) ** 2 + rng() * 80;
       let hit = rng() < 0.93;
-      if (c.idx === 3 && i === 39) { mt = 10000; hit = true; }
+      if (c.idx === 3 && i === 39) {
+        mt = 10000;
+        hit = true;
+      }
       records.push({
         condId: c.idx,
         trialIdx: i,
@@ -150,7 +194,7 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
         signedErrDeg: (rng() - 0.4) * 2,
         submovements: 1 + Math.floor(rng() * 2),
         firstPeakVel: 100,
-        swipiness: 0.4 + rng() * 0.8
+        swipiness: 0.4 + rng() * 0.8,
       });
     }
   }
@@ -161,44 +205,180 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
     near(rep.global.optCm360, 36 / optDpm, 5, 'global opt near true 40 cm/360');
   }
   ok(rep.buckets.low && rep.buckets.high, 'buckets present');
-  ok(rep.plateau && rep.global.optCm360 >= rep.plateau.lo && rep.global.optCm360 <= rep.plateau.hi, 'plateau is curve-derived and contains the optimum');
+  ok(
+    rep.plateau && rep.global.optCm360 >= rep.plateau.lo && rep.global.optCm360 <= rep.plateau.hi,
+    'plateau is curve-derived and contains the optimum',
+  );
   ok(rep.counts.trials === 162, 'kept trials = 162 (2/3 of 240), got ' + rep.counts.trials);
   ok(rep.warnings.length === 0, 'no warnings under clean data');
-  const c45 = rep.conds.find(c => Math.abs(c.cm360 - 45.18) < 1);
-  ok(c45 && c45.meanMT < 600, 'p95 outlier cleaning (10000ms excluded): meanMT ' + (c45 && Math.round(c45.meanMT)));
-  ok(rep.flickStyle && rep.flickStyle.meanSwip >= 0.4 && rep.flickStyle.meanSwip <= 1.2, 'flickStyle meanSwip computed: ' + (rep.flickStyle && rep.flickStyle.meanSwip.toFixed(2)));
-  ok(rep.flickStyle.style === 'mixed' || rep.flickStyle.style === 'swipe' || rep.flickStyle.style === 'land', 'flickStyle label valid: ' + (rep.flickStyle && rep.flickStyle.style));
+  const c45 = rep.conds.find((c) => Math.abs(c.cm360 - 45.18) < 1);
+  ok(
+    c45 && c45.meanMT < 600,
+    'p95 outlier cleaning (10000ms excluded): meanMT ' + (c45 && Math.round(c45.meanMT)),
+  );
+  ok(
+    rep.flickStyle && rep.flickStyle.meanSwip >= 0.4 && rep.flickStyle.meanSwip <= 1.2,
+    'flickStyle meanSwip computed: ' + (rep.flickStyle && rep.flickStyle.meanSwip.toFixed(2)),
+  );
+  ok(
+    rep.flickStyle.style === 'mixed' ||
+      rep.flickStyle.style === 'swipe' ||
+      rep.flickStyle.style === 'land',
+    'flickStyle label valid: ' + (rep.flickStyle && rep.flickStyle.style),
+  );
+})();
+
+(function reportImageLayoutTest() {
+  const RI = SZ.reportImage;
+  ok(typeof RI.layout === 'function' && typeof RI.draw === 'function', 'reportImage API present');
+  ok(
+    RI.ellipsize('abcdefg', 5) === 'abcd…' && RI.ellipsize('ab', 5) === 'ab',
+    'ellipsize truncates with ellipsis',
+  );
+
+  const full = {
+    ts: 1788500000000,
+    settings: { dpi: 800 },
+    anchorCm360: 45.2,
+    rawMode: 'raw',
+    counts: { trials: 96, hits: 96 },
+    global: { method: 'quadratic', optCm360: 44.1, ci: [40, 47], ciWide: null },
+    plateau: { lo: 25.7, hi: 87.2 },
+    conds: [],
+    flickStyle: { meanSwip: 3.1, style: 'land' },
+    warnings: [],
+    track: {
+      reliable: true,
+      global: { method: 'quadratic', optCm360: 39.5, ci: null },
+      plateau: { lo: 25.1, hi: 62.3 },
+      conds: [],
+    },
+  };
+  const L = RI.layout(full, { combinedCm: 42.0 });
+  ok(
+    L.bars.length === 2 && L.bars[0].hasRange && L.bars[1].hasRange,
+    'layout: two bars with ranges',
+  );
+  ok(
+    L.overlap && Math.abs(L.overlap.lo - 25.7) < 1e-9 && Math.abs(L.overlap.hi - 62.3) < 1e-9,
+    'layout: overlap is intersection of plateaus',
+  );
+  ok(
+    L.combinedStr === '42.0' && L.convRows.length >= 3,
+    'layout: combined value + conv table rows',
+  );
+  ok(
+    L.convRows.every((r) => isFinite(Number(r.sensStr)) === false || Number(r.sensStr) > 0),
+    'layout: conv sens values positive or em-dash',
+  );
+  ok(L.width === 1200 && L.height > 400, 'layout: canvas size sane');
+
+  const noTrack = Object.assign({}, full, {
+    track: null,
+    global: { method: 'insufficient', optCm360: null },
+  });
+  const L2 = RI.layout(noTrack, {});
+  ok(
+    L2.bars[0].centerStr === '—' && L2.combinedStr === '—',
+    'layout: missing flick+track renders em-dash',
+  );
+  ok(
+    L2.overlap === null && L2.bars[1].centerStr === '—',
+    'layout: no track => no overlap, track bar em-dash',
+  );
+  ok(L2.height > 300 && L2.domain.x1 > L2.domain.x0, 'layout: fallback domain and height sane');
+})();
+
+(function historyTrendTest() {
+  const single = [{ ts: 1000, report: { global: { optCm360: 44 } } }];
+  ok(
+    SZ.charts.historyTrendSeries(single, { x: 0, y: 0, w: 100, h: 100 }) === null,
+    'trend: single history entry => null (empty state)',
+  );
+  const two = [
+    { ts: 2000, report: { global: { optCm360: 40 }, track: { global: { optCm360: 42 } } } },
+    { ts: 1000, report: { global: { optCm360: 44 } } },
+  ];
+  const s = SZ.charts.historyTrendSeries(two, { x: 0, y: 0, w: 100, h: 100 });
+  ok(
+    s && s.pts.length === 2 && s.pts[0].ts === 1000,
+    'trend: two entries present and sorted by time',
+  );
+  ok(
+    s.pts[0].yFlick < s.pts[1].yFlick && isFinite(s.pts[1].yCombined),
+    'trend: larger cm maps to smaller y-px, combined computed',
+  );
+  ok(
+    SZ.charts.historyTrendSeries(
+      [
+        { ts: 1, report: { global: { optCm360: NaN } } },
+        { ts: 2, report: null },
+      ],
+      { x: 0, y: 0, w: 100, h: 100 },
+    ) === null,
+    'trend: corrupt/degenerate history handled as empty',
+  );
 })();
 
 (function renderContractTest() {
   const task = SZ.taskFlick.createFlickTask({
     getCamera: () => ({ az: 0, el: 0 }),
     resetCamera: () => {},
-    onHud: () => {}, onFeedback: () => {}, onTrialComplete: () => {},
-    onNeedNextTrial: () => {}, onTrialStart: () => {}
+    onHud: () => {},
+    onFeedback: () => {},
+    onTrialComplete: () => {},
+    onNeedNextTrial: () => {},
+    onTrialStart: () => {},
   });
-  const spec = { condId: 0, trialIdx: 0, cond: {}, sens: {}, az: 10, el: 1, radDeg: 1, widthDeg: 2, idBits: 3 };
+  const spec = {
+    condId: 0,
+    trialIdx: 0,
+    cond: {},
+    sens: {},
+    az: 10,
+    el: 1,
+    radDeg: 1,
+    widthDeg: 2,
+    idBits: 3,
+  };
   task.startTrial(spec, 'test');
   const s1 = task.getScene();
-  ok(s1.test && SZ.render.STYLE[s1.test.style], 'flick settle scene style known to renderer: ' + (s1.test && s1.test.style));
+  ok(
+    s1.test && SZ.render.STYLE[s1.test.style],
+    'flick settle scene style known to renderer: ' + (s1.test && s1.test.style),
+  );
   ok(s1.ref === null, 'no reference target in v2 scene');
   const t2 = SZ.taskTrack.createTrackTask({
     getCamera: () => ({ az: 0, el: 0 }),
-    onHud: () => {}, onProgress: () => {}, onTrackComplete: () => {}, onNeedNextTrack: () => {}
+    onHud: () => {},
+    onProgress: () => {},
+    onTrackComplete: () => {},
+    onNeedNextTrack: () => {},
   });
   t2.startRun({ idx: 0 }, 'test', 12345, 15);
   const s2 = t2.getScene();
-  ok(s2.test && SZ.render.STYLE[s2.test.style], 'track scene style known to renderer: ' + (s2.test && s2.test.style));
+  ok(
+    s2.test && SZ.render.STYLE[s2.test.style],
+    'track scene style known to renderer: ' + (s2.test && s2.test.style),
+  );
   const p1 = t2.getTargetPos();
   ok(Math.abs(p1.az) <= 33 && Math.abs(p1.el) <= 6, 'track target within bands');
 })();
 
 (function trajectoryTest() {
   const traj = SZ.taskTrack.makeTrajectory(424242);
-  let maxV = 0, maxAz = 0, maxEl = 0, reversals = 0, lowSpeedFrames = 0, totalFrames = 0, maxStep = 0;
-  let prevAz = traj.az(0), prevV = null;
+  let maxV = 0,
+    maxAz = 0,
+    maxEl = 0,
+    reversals = 0,
+    lowSpeedFrames = 0,
+    totalFrames = 0,
+    maxStep = 0;
+  let prevAz = traj.az(0),
+    prevV = null;
   for (let t = 0.004; t <= SZ.taskTrack.DURATION_S; t += 0.004) {
-    const az = traj.az(t), el = traj.el(t);
+    const az = traj.az(t),
+      el = traj.el(t);
     const v = (az - prevAz) / 0.004;
     const av = Math.abs(v);
     if (av > maxV) maxV = av;
@@ -210,17 +390,34 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
     }
     if (Math.abs(az) > maxAz) maxAz = Math.abs(az);
     if (Math.abs(el) > maxEl) maxEl = Math.abs(el);
-    if (prevV !== null && Math.sign(v) !== 0 && Math.sign(prevV) !== 0 && Math.sign(v) !== Math.sign(prevV)) reversals++;
+    if (
+      prevV !== null &&
+      Math.sign(v) !== 0 &&
+      Math.sign(prevV) !== 0 &&
+      Math.sign(v) !== Math.sign(prevV)
+    )
+      reversals++;
     prevAz = az;
     prevV = v;
   }
   ok(maxV <= 45, 'trajectory peak angular velocity <= 45 deg/s, got ' + maxV.toFixed(1));
   ok(maxAz >= 15 && maxAz <= 33, 'az amplitude in [15, 33], got ' + maxAz.toFixed(1));
   ok(maxEl <= 6, 'el amplitude <= 6 deg, got ' + maxEl.toFixed(2));
-  ok(lowSpeedFrames / totalFrames < 0.05, 'shallow dips only: |v|<3 deg/s frames < 5%, got ' + (100 * lowSpeedFrames / totalFrames).toFixed(2) + '%');
-  ok(maxStep < 2, 'no velocity steps (smooth turns): max dv per frame < 2 deg/s, got ' + maxStep.toFixed(2));
-  const minutes = totalFrames * 0.004 / 60;
-  ok(reversals / minutes >= 20 && reversals / minutes <= 60, 'direction flips 20-60 per min, got ' + (reversals / minutes).toFixed(0));
+  ok(
+    lowSpeedFrames / totalFrames < 0.05,
+    'shallow dips only: |v|<3 deg/s frames < 5%, got ' +
+      ((100 * lowSpeedFrames) / totalFrames).toFixed(2) +
+      '%',
+  );
+  ok(
+    maxStep < 2,
+    'no velocity steps (smooth turns): max dv per frame < 2 deg/s, got ' + maxStep.toFixed(2),
+  );
+  const minutes = (totalFrames * 0.004) / 60;
+  ok(
+    reversals / minutes >= 20 && reversals / minutes <= 60,
+    'direction flips 20-60 per min, got ' + (reversals / minutes).toFixed(0),
+  );
 })();
 
 (function rowWeightTest() {
@@ -232,10 +429,16 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
     const m = Math.abs(spec.az);
     let row = 4;
     const bounds = [9, 11.7, 15, 19.4, 25.01];
-    for (let b = 0; b < 5; b++) { if (m < bounds[b]) { row = b; break; } }
+    for (let b = 0; b < 5; b++) {
+      if (m < bounds[b]) {
+        row = b;
+        break;
+      }
+    }
     rows[row]++;
   }
-  const frac0 = rows[0] / N, fracMid = (rows[2] + rows[3]) / N;
+  const frac0 = rows[0] / N,
+    fracMid = (rows[2] + rows[3]) / N;
   ok(frac0 < 0.2, 'closest band under-weighted (<20%), got ' + (frac0 * 100).toFixed(1) + '%');
   ok(fracMid > 0.45, 'mid bands dominate (>45%), got ' + (fracMid * 100).toFixed(1) + '%');
 })();
@@ -251,11 +454,13 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
     const blocks = [];
     for (let b = 0; b < 13; b++) blocks.push(Math.max(0.4, base + (rng2() - 0.5) * 0.3));
     results.push({
-      condId: c.idx, cond: c,
+      condId: c.idx,
+      cond: c,
       sens: { dpm: c.dpm, cm360: c.cm360, gameSens: c.gameSens },
       rms: Math.sqrt(blocks.reduce((s, v) => s + v * v, 0) / blocks.length),
-      onTargetPct: 0.7, lagMs: 60 + x * 10,
-      blocks
+      onTargetPct: 0.7,
+      lagMs: 60 + x * 10,
+      blocks,
     });
   }
   const tr = SZ.analysis.analyzeTrack(results, settings2);
@@ -267,18 +472,44 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
 })();
 
 (function uiHelpersTest() {
-  ok(typeof SZ.ui.combinedCm360 === 'function', 'combinedCm360 defined (regression: report buttons died when missing)');
+  ok(
+    typeof SZ.ui.combinedCm360 === 'function',
+    'combinedCm360 defined (regression: report buttons died when missing)',
+  );
   ok(typeof SZ.ui.centersOf === 'function', 'centersOf defined');
   const fake = {
     plateau: { bestCm360: 45 },
     global: { optCm360: 45 },
-    track: { plateau: { bestCm360: 60 }, global: { optCm360: 60 } }
+    track: { plateau: { bestCm360: 60 }, global: { optCm360: 60 } },
   };
   near(SZ.ui.combinedCm360(fake, 50), Math.sqrt(45 * 60), 0.1, 'combined geometric mean 50/50');
   near(SZ.ui.combinedCm360(fake, 0), 60, 0.01, 'combined 0% flick = track center');
   near(SZ.ui.combinedCm360(fake, 100), 45, 0.01, 'combined 100% flick = flick center');
   ok(SZ.ui.combinedCm360({ global: {}, track: null }, 50) === null, 'combined with no data = null');
-  ok(SZ.ui.combinedCm360({ global: { optCm360: 45 }, track: null }, 50) === 45, 'combined flick-only = flick center');
+  ok(
+    SZ.ui.combinedCm360({ global: { optCm360: 45 }, track: null }, 50) === 45,
+    'combined flick-only = flick center',
+  );
+  // 回归：历史行必须读 entry.report（曾误传 entry 本身导致恒显示"数据不足"）
+  ok(typeof SZ.ui.historyRowValue === 'function', 'historyRowValue exported');
+  ok(
+    SZ.ui.historyRowValue({
+      ts: 1,
+      report: { global: { optCm360: 49.3 }, plateau: { bestCm360: 49.3 } },
+    }) === 49.3,
+    'historyRowValue reads entry.report (not entry)',
+  );
+  ok(
+    SZ.ui.historyRowValue({
+      ts: 2,
+      report: { global: { optCm360: null }, track: { global: { optCm360: 36.9 } } },
+    }) === 36.9,
+    'historyRowValue falls back to track center (track-only session)',
+  );
+  ok(
+    SZ.ui.historyRowValue({ ts: 3 }) === null && SZ.ui.historyRowValue(null) === null,
+    'historyRowValue null-safe',
+  );
 })();
 
 (function reliabilityTest() {
@@ -294,11 +525,13 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
       for (let b = 0; b < 13; b++) blocks.push(Math.max(0.4, base + (rng3() - 0.5) * 0.3));
       if (mode === 'flat') blocks = blocks.map(() => 2.5 + rng3() * 0.2);
       rs.push({
-        condId: c.idx, cond: c,
+        condId: c.idx,
+        cond: c,
         sens: { dpm: c.dpm, cm360: c.cm360, gameSens: c.gameSens },
         rms: Math.sqrt(blocks.reduce((s, v) => s + v * v, 0) / blocks.length),
-        onTargetPct: 0.7, lagMs: 60,
-        blocks
+        onTargetPct: 0.7,
+        lagMs: 60,
+        blocks,
       });
     }
     return rs;
@@ -307,7 +540,28 @@ ok(specA.idBits >= 0.8 && specA.idBits <= 5.6, 'ID in paper range: ' + specA.idB
   ok(clean && clean.reliable === true, 'clean track fit is reliable');
   const flat = SZ.analysis.analyzeTrack(mkResults('flat'), settings3);
   ok(flat && flat.reliable === false, 'flat track fit excluded from blending');
-  ok(SZ.ui.centersOf({ global: { optCm360: 35 }, plateau: { bestCm360: 30 }, track: null }).flickCm === 35, 'centersOf prefers fitted optimum over plateau best');
+  ok(
+    SZ.ui.centersOf({ global: { optCm360: 35 }, plateau: { bestCm360: 30 }, track: null })
+      .flickCm === 35,
+    'centersOf prefers fitted optimum over plateau best',
+  );
+})();
+
+(function gamesYawTest() {
+  Object.keys(m.GAMES).forEach((id) => {
+    const g = m.GAMES[id];
+    const cm = m.cm360(g.yaw, 1.5, 800);
+    const back = m.sensFromCm360(g.yaw, cm, 800);
+    ok(Math.abs(back - 1.5) < 1e-9, 'game ' + id + ': cm360/sensFromCm360 round-trip');
+    const fov = m.gameFov(id, 16 / 9, g.defaultFov);
+    ok(isFinite(fov.hFov) && isFinite(fov.vFov), 'game ' + id + ': gameFov finite');
+  });
+  const thirdParty = 0.0156;
+  const cm3 = m.cm360(thirdParty, 2.2, 1600);
+  ok(
+    Math.abs(m.sensFromCm360(thirdParty, cm3, 1600) - 2.2) < 1e-9,
+    'custom yaw (third-party value) round-trip consistent',
+  );
 })();
 
 console.log(failures ? 'FAILURES: ' + failures : 'ALL PASS');

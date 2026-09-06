@@ -8,7 +8,7 @@
     { azMin: 9, azMax: 11.7, elMax: 1.3 },
     { azMin: 11.7, azMax: 15, elMax: 1.7 },
     { azMin: 15, azMax: 19.4, elMax: 2.2 },
-    { azMin: 19.4, azMax: 25, elMax: 2.8 }
+    { azMin: 19.4, azMax: 25, elMax: 2.8 },
   ];
   const WARMUP_TRIALS = 10;
   const TRACK_WARMUP_S = 5;
@@ -26,12 +26,12 @@
         dpm,
         cm360: cm,
         gameSens: SZ.math.sensFromCm360(settings.yaw, settings.dpi, cm),
-        seed: (settings.sessionId + i * 7919) >>> 0
+        seed: (settings.sessionId + i * 7919) >>> 0,
       };
     });
   }
 
-  const ROW_W = [0.10, 0.18, 0.30, 0.26, 0.16];
+  const ROW_W = [0.1, 0.18, 0.3, 0.26, 0.16];
 
   function makeTrialSpec(cond, trialIdx) {
     const rng = SZ.math.mulberry32((cond.seed ^ Math.imul(trialIdx + 1, 2246822519)) >>> 0);
@@ -40,7 +40,10 @@
     let row = 4;
     for (let i = 0; i < 5; i++) {
       acc += ROW_W[i];
-      if (r1 < acc) { row = i; break; }
+      if (r1 < acc) {
+        row = i;
+        break;
+      }
     }
     const col = Math.floor(rng() * 5);
     const band = BANDS[row];
@@ -57,16 +60,20 @@
       el,
       radDeg: w / 2,
       widthDeg: w,
-      idBits: SZ.math.indexOfDifficulty(D, w)
+      idBits: SZ.math.indexOfDifficulty(D, w),
     };
   }
 
   function createSession(settings, hooks) {
     const conds = buildConditions(settings);
-    const mode = settings.taskMode === 'both' || settings.taskMode === 'track' ? settings.taskMode : 'flick';
+    const mode =
+      settings.taskMode === 'both' || settings.taskMode === 'track' ? settings.taskMode : 'flick';
     const hasFlick = mode !== 'track';
     const hasTrack = mode !== 'flick';
-    const order = SZ.math.shuffle(conds.map(c => c.idx), SZ.math.mulberry32(settings.sessionId >>> 0));
+    const order = SZ.math.shuffle(
+      conds.map((c) => c.idx),
+      SZ.math.mulberry32(settings.sessionId >>> 0),
+    );
 
     let records = [];
     let trackResults = [];
@@ -85,16 +92,19 @@
 
     function persist() {
       try {
-        localStorage.setItem('sz.session.v1', JSON.stringify({
-          v: 2,
-          sessionId: settings.sessionId,
-          settings: SZ.session.exportSettings(settings),
-          order,
-          completed,
-          records,
-          trackResults,
-          trackDone
-        }));
+        localStorage.setItem(
+          'sz.session.v1',
+          JSON.stringify({
+            v: 2,
+            sessionId: settings.sessionId,
+            settings: SZ.session.exportSettings(settings),
+            order,
+            completed,
+            records,
+            trackResults,
+            trackDone,
+          }),
+        );
       } catch (_) {}
     }
 
@@ -128,7 +138,10 @@
         phase = 'flick';
         pos = -1;
         for (let i = 0; i < order.length; i++) {
-          if (!completed.includes(order[i])) { pos = i - 1; break; }
+          if (!completed.includes(order[i])) {
+            pos = i - 1;
+            break;
+          }
         }
         nextCondition();
         return;
@@ -163,10 +176,15 @@
     function startTrackWarmup() {
       phase = 'track';
       warmup = true;
-      currentCond = conds.find(c => c.mult === 1.0);
+      currentCond = conds.find((c) => c.mult === 1.0);
       state = 'testing';
       hooks.onConditionBegin(currentCond, true, 'track');
-      hooks.startTrackRun(currentCond, 'warmup', (settings.sessionId ^ 0x9e3779b9) >>> 0, TRACK_WARMUP_S);
+      hooks.startTrackRun(
+        currentCond,
+        'warmup',
+        (settings.sessionId ^ 0x9e3779b9) >>> 0,
+        TRACK_WARMUP_S,
+      );
     }
 
     function beginConditionTrials() {
@@ -188,7 +206,7 @@
       if (hasFlick) {
         phase = 'flick';
         warmup = true;
-        currentCond = conds.find(c => c.mult === 1.0);
+        currentCond = conds.find((c) => c.mult === 1.0);
         state = 'testing';
         hooks.onConditionBegin(currentCond, true, 'flick');
         requestNextTrial();
@@ -208,7 +226,7 @@
       spec.sens = {
         dpm: currentCond.dpm,
         cm360: currentCond.cm360,
-        gameSens: currentCond.gameSens
+        gameSens: currentCond.gameSens,
       };
       trialPos++;
       hooks.onTrialStart(spec, trialPos, total);
@@ -286,18 +304,28 @@
 
     function abort() {
       state = 'idle';
-      try { localStorage.removeItem('sz.session.v1'); } catch (_) {}
+      try {
+        localStorage.removeItem('sz.session.v1');
+      } catch (_) {}
     }
 
     function finishSession() {
       state = 'finished';
-      try { localStorage.removeItem('sz.session.v1'); } catch (_) {}
+      try {
+        localStorage.removeItem('sz.session.v1');
+      } catch (_) {}
       hooks.onSessionComplete(records.slice(), trackResults.slice());
     }
 
-    function getState() { return state; }
-    function getPhase() { return phase; }
-    function getCurrentCond() { return currentCond; }
+    function getState() {
+      return state;
+    }
+    function getPhase() {
+      return phase;
+    }
+    function getCurrentCond() {
+      return currentCond;
+    }
     function getProgress() {
       return {
         condPos: pos + 1,
@@ -306,26 +334,61 @@
         trialPos,
         trialsTotal: warmup ? WARMUP_TRIALS : settings.trialsPerCond,
         warmup,
-        phase
+        phase,
       };
     }
 
     return {
-      start, startWarmup, resume, update, pause, resumeSession, abort,
-      onTrialComplete, onTrackComplete, persist, getState, getPhase, getCurrentCond, getProgress,
-      requestNextTrial, requestNextTrack, order, conds
+      start,
+      startWarmup,
+      resume,
+      update,
+      pause,
+      resumeSession,
+      abort,
+      onTrialComplete,
+      onTrackComplete,
+      persist,
+      getState,
+      getPhase,
+      getCurrentCond,
+      getProgress,
+      requestNextTrial,
+      requestNextTrack,
+      order,
+      conds,
     };
   }
 
   function exportSettings(s) {
     return {
-      game: s.game, aspect: s.aspect, customFov: s.customFov,
-      dpi: s.dpi, sens: s.sens, yaw: s.yaw,
-      trialsPerCond: s.trialsPerCond, padWidthCm: s.padWidthCm,
+      game: s.game,
+      aspect: s.aspect,
+      customFov: s.customFov,
+      dpi: s.dpi,
+      sens: s.sens,
+      yaw: s.yaw,
+      trialsPerCond: s.trialsPerCond,
+      padWidthCm: s.padWidthCm,
       taskMode: s.taskMode || 'flick',
-      sessionId: s.sessionId
+      sessionId: s.sessionId,
     };
   }
 
-  SZ.session = { createSession, buildConditions, makeTrialSpec, exportSettings, MULTS, WIDTHS, BANDS, ROW_W, WARMUP_TRIALS, COUNTDOWN_MS };
-})(typeof window !== 'undefined' ? (window.SZ = window.SZ || {}) : (globalThis.SZ = globalThis.SZ || {}));
+  SZ.session = {
+    createSession,
+    buildConditions,
+    makeTrialSpec,
+    exportSettings,
+    MULTS,
+    WIDTHS,
+    BANDS,
+    ROW_W,
+    WARMUP_TRIALS,
+    COUNTDOWN_MS,
+  };
+})(
+  typeof window !== 'undefined'
+    ? (window.SZ = window.SZ || {})
+    : (globalThis.SZ = globalThis.SZ || {}),
+);

@@ -15,21 +15,34 @@
 
   let task = SZ.taskFlick.createFlickTask({
     getCamera: () => cam,
-    resetCamera: () => { cam.az = 0; cam.el = 0; },
+    resetCamera: () => {
+      cam.az = 0;
+      cam.el = 0;
+    },
     onHud: () => {},
     onFeedback: (kind, mt) => SZ.ui.feedback(kind, mt),
-    onTrialComplete: (record, kind) => { if (session) session.onTrialComplete(record, kind); },
-    onNeedNextTrial: () => { if (session) session.requestNextTrial(); },
-    onTrialAborted: () => { if (session) session.requestNextTrial(); },
-    onTrialStart: () => {}
+    onTrialComplete: (record, kind) => {
+      if (session) session.onTrialComplete(record, kind);
+    },
+    onNeedNextTrial: () => {
+      if (session) session.requestNextTrial();
+    },
+    onTrialAborted: () => {
+      if (session) session.requestNextTrial();
+    },
+    onTrialStart: () => {},
   });
 
   let trackTask = SZ.taskTrack.createTrackTask({
     getCamera: () => cam,
     onHud: () => {},
     onProgress: (frac) => SZ.ui.setProgress(1 - frac),
-    onTrackComplete: (result, kind) => { if (session) session.onTrackComplete(result, kind); },
-    onNeedNextTrack: () => { if (session) session.requestNextTrack(); }
+    onTrackComplete: (result, kind) => {
+      if (session) session.onTrackComplete(result, kind);
+    },
+    onNeedNextTrack: () => {
+      if (session) session.requestNextTrack();
+    },
   });
 
   window.addEventListener('resize', () => SZ.render.resize());
@@ -85,7 +98,9 @@
     if (!saved) SZ.ui.saveSettings(settings);
     SZ.ui.showTesting();
     if (settings.fullscreen && !document.fullscreenElement) {
-      try { await document.documentElement.requestFullscreen(); } catch (_) {}
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (_) {}
     }
     const mode = await SZ.input.lock();
     SZ.ui.setRawStatus(mode);
@@ -95,17 +110,25 @@
       onCountdownEnd: () => SZ.ui.hideCountdown(),
       onConditionBegin: (cond, warmup, kind) => {
         applyConditionK(cond);
-        if (kind !== 'track') { cam.az = 0; cam.el = 0; }
+        if (kind !== 'track') {
+          cam.az = 0;
+          cam.el = 0;
+        }
         SZ.ui.setCondition(cond, warmup, kind);
       },
       onTrialStart: (spec, i, total) => SZ.ui.setTrial(i, total),
       startTrial: (spec, kind) => task.startTrial(spec, kind),
-      startTrackRun: (cond, kind, seed, durationS) => trackTask.startRun(cond, kind, seed, durationS),
-      onTrialComplete: (record, kind) => { if (session) session.onTrialComplete(record, kind); },
-      onNeedNextTrial: () => { if (session) session.requestNextTrial(); },
+      startTrackRun: (cond, kind, seed, durationS) =>
+        trackTask.startRun(cond, kind, seed, durationS),
+      onTrialComplete: (record, kind) => {
+        if (session) session.onTrialComplete(record, kind);
+      },
+      onNeedNextTrial: () => {
+        if (session) session.requestNextTrial();
+      },
       onFeedback: (kind, mt) => SZ.ui.feedback(kind, mt),
       onHud: () => {},
-      onSessionComplete: (records, trackResults) => finishSession(records, trackResults, settings)
+      onSessionComplete: (records, trackResults) => finishSession(records, trackResults, settings),
     };
     session = SZ.session.createSession(settings, hooks);
     session.settings = settings;
@@ -166,7 +189,9 @@
 
   function checkResume() {
     let saved = null;
-    try { saved = JSON.parse(localStorage.getItem('sz.session.v1') || 'null'); } catch (_) {}
+    try {
+      saved = JSON.parse(localStorage.getItem('sz.session.v1') || 'null');
+    } catch (_) {}
     const row = document.getElementById('resume-row');
     if (saved && saved.settings && saved.settings.sessionId) {
       const mode = saved.settings.taskMode || 'flick';
@@ -179,7 +204,9 @@
           beginWithSession(saved);
         };
         document.getElementById('btn-discard').onclick = () => {
-          try { localStorage.removeItem('sz.session.v1'); } catch (_) {}
+          try {
+            localStorage.removeItem('sz.session.v1');
+          } catch (_) {}
           row.classList.add('hidden');
         };
         return;
@@ -191,4 +218,8 @@
   SZ.ui.bindCommon(checkResume);
   SZ.ui.applyLang();
   checkResume();
-})(typeof window !== 'undefined' ? (window.SZ = window.SZ || {}) : (globalThis.SZ = globalThis.SZ || {}));
+})(
+  typeof window !== 'undefined'
+    ? (window.SZ = window.SZ || {})
+    : (globalThis.SZ = globalThis.SZ || {}),
+);

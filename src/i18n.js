@@ -11,6 +11,8 @@
       aspect43: '4:3（含拉伸）',
       aspect169: '16:9 原生',
       customFov: '自定义水平 FOV（°）',
+      customYaw: 'Custom yaw（°/count，游戏未预设时查游戏换算表）',
+      yawInvalid: 'yaw 校验未通过，请检查输入',
       dpi: '鼠标 DPI',
       sens: '游戏内灵敏度',
       trialsPerCond: '每个灵敏度条件的试次数',
@@ -50,15 +52,18 @@
       flickWeight: '甩枪占比',
       trackWeight: '跟枪占比',
       combinedNote: '滑块按你对甩枪/跟枪的侧重合成推荐值；纯步枪可偏甩枪，主跟枪/机枪可偏跟枪',
-      combinedAnchorNote: '你的当前配置已在甩枪最优平台内——测量与长期习惯有出入但差异落在等价带内时，建议优先保持现有灵敏度',
-      trackUnreliable: '跟枪曲线拟合置信区间过宽（数据近似平坦或受干扰），本次不参与合成推荐，以下按甩枪结果换算',
+      combinedAnchorNote:
+        '你的当前配置已在甩枪最优平台内——测量与长期习惯有出入但差异落在等价带内时，建议优先保持现有灵敏度',
+      trackUnreliable:
+        '跟枪曲线拟合置信区间过宽（数据近似平坦或受干扰），本次不参与合成推荐，以下按甩枪结果换算',
       chartTrack: '跟枪 RMS 偏差 vs 灵敏度（越低越好）',
       trackDetail: '跟枪分条件明细',
       trackRms: 'RMS 偏差',
       trackOnTarget: '在靶时间',
       trackLag: '平均滞后',
-      trackLagNote: '滞后 = 准星速度峰值相对靶速度峰值的平均延迟；正值说明跟得慢（倾向提高灵敏度），接近 0 或负值说明跟得上',
-      versionNote: 'SensZone 灵敏域 v1.3 · © 2026 YMZS · 保留所有权利',
+      trackLagNote:
+        '滞后 = 准星速度峰值相对靶速度峰值的平均延迟；正值说明跟得慢（倾向提高灵敏度），接近 0 或负值说明跟得上',
+      versionNote: 'SensZone 灵敏域 v' + SZ.VERSION + ' · © 2026 YMZS · 保留所有权利',
       alignHint: '甩向绿色靶子（开始移动即计时，无反应时间惩罚）',
       feedbackHit: '命中',
       feedbackMiss: '未命中',
@@ -69,11 +74,13 @@
       plateauIn: '已在最优平台内，建议保持或按手感微调',
       plateauOut: '不在平台内，建议向平台区间调整',
       adjMtShort: 'MT*',
-      adjNote: 'MT* 已按任务难度归一（ANCOVA，ID=3.0 bits 基准），消除各条件抽到难易不同靶子的运气差异',
+      adjNote:
+        'MT* 已按任务难度归一（ANCOVA，ID=3.0 bits 基准），消除各条件抽到难易不同靶子的运气差异',
       phaseTitle: '甩枪时间分解（IEEE 发表版 Fig.13 协议）',
       verifyShort: '验证时间',
       pauseShort: '停顿时间',
-      phaseNote: '验证 = 最后一次移动结束到开枪的确认耗时，停顿 = 子动作之间的停顿总和。论文实证：高灵敏度的代价主要来自验证/停顿时间增长而非转动变慢——若验证时间随灵敏度上升，说明高敏让你更多犹豫',
+      phaseNote:
+        '验证 = 最后一次移动结束到开枪的确认耗时，停顿 = 子动作之间的停顿总和。论文实证：高灵敏度的代价主要来自验证/停顿时间增长而非转动变慢——若验证时间随灵敏度上升，说明高敏让你更多犹豫',
       countdownNext: '下一灵敏度',
       countdownHint: '可随时按 ESC 暂停',
       pauseTitle: '已暂停',
@@ -101,17 +108,21 @@
       diagnosis: '诊断与说明',
       warnings: '警告',
       methodNote: '方法说明',
-      methodText: '任务范式与统计口径对齐 Boudaoud et al.（NVIDIA）：离散甩枪任务、Shannon 难度 ID=log₂(D/W+1)、吞吐量 ID/MT、每条件丢弃前 1/3 试次、条件顺序随机化、MT 按难度 ANCOVA 归一后加权拟合。论文人群最优区间为 0.45–1.8 °/mm（20–80 cm/360），仅供参照，你的个人区间以本报告实测为准。',
+      methodText:
+        '任务范式与统计口径对齐 Boudaoud et al.（NVIDIA）：离散甩枪任务、Shannon 难度 ID=log₂(D/W+1)、吞吐量 ID/MT、每条件丢弃前 1/3 试次、条件顺序随机化、MT 按难度 ANCOVA 归一后加权拟合。论文人群最优区间为 0.45–1.8 °/mm（20–80 cm/360），仅供参照，你的个人区间以本报告实测为准。',
       paperBand: '论文人群最优带：20–80 cm/360',
       constraint: '物理约束校验',
       constraintOk: '180° 转身约 {d} cm，占垫宽 {p}%，符合经验上限（45%）',
-      constraintBad: '180° 转身约 {d} cm，占垫宽 {p}%，超过经验上限（45%）：建议提高灵敏度或更换大垫',
+      constraintBad:
+        '180° 转身约 {d} cm，占垫宽 {p}%，超过经验上限（45%）：建议提高灵敏度或更换大垫',
       constraintSkip: '未填写垫宽，跳过校验',
       retryBtn: '重新测试',
       backMenu: '返回菜单',
       exportBtn: '导出 JSON',
+      exportPngBtn: '导出图片',
       history: '历史报告',
       historyEmpty: '暂无历史记录',
+      trendEmpty: '完成 ≥2 次测试后显示趋势图',
       minutes: '预计用时约 {m} 分钟',
       hitRateShort: '命中率',
       mtShort: '平均 MT',
@@ -119,12 +130,14 @@
       tpShort: '吞吐量',
       subShort: '子动作',
       swipShort: 'swipiness',
-      swipNote: 'swipiness = 开枪时刻 / 首个子动作速度峰值时刻 / 2（SPAR 协议）：0.5 ≈ 甩中即打（swipe），≥1 ≈ 停稳再打（flick-and-land）',
+      swipNote:
+        'swipiness = 开枪时刻 / 首个子动作速度峰值时刻 / 2（SPAR 协议）：0.5 ≈ 甩中即打（swipe），≥1 ≈ 停稳再打（flick-and-land）',
       flickStyle: '甩枪风格',
       styleSwipe: '甩中即打（swipe 型，偏好更高灵敏度）',
       styleMixed: '混合型',
       styleLand: '停稳再打（flick-and-land 型，偏好更低灵敏度）',
-      roleNote: '角色画像（NVIDIA 论文 §5.2）：近战/突破手经历低 ID 任务，偏好更高灵敏度；远程/架点经历高 ID 任务，偏好更低灵敏度——滑块按你的主要交战距离取位',
+      roleNote:
+        '角色画像（NVIDIA 论文 §5.2）：近战/突破手经历低 ID 任务，偏好更高灵敏度；远程/架点经历高 ID 任务，偏好更低灵敏度——滑块按你的主要交战距离取位',
       trackLagSummary: '平均跟枪滞后 {lag} ms（方向变化响应）——正值表示准星落后目标',
       overShort: '过冲率',
       insufficient: '数据不足',
@@ -136,17 +149,20 @@
       overallHitRate: '总体命中率 {hr}% 低于协议目标（85%），结果仅供参考',
       rawInputWarn: '浏览器未确认原始鼠标输入（unadjustedMovement），数值可能受系统加速影响',
       aborted: '已终止',
-      dataUseNote: '建议在游戏死斗中验证 1–2 周后再最终定档'
+      dataUseNote: '建议在游戏死斗中验证 1–2 周后再最终定档',
     },
-    'en': {
+    en: {
       appTitle: 'SensZone',
-      tagline: 'Kinematics + Fitts' + String.fromCharCode(8217) + 's-law based FPS sensitivity finder',
+      tagline:
+        'Kinematics + Fitts' + String.fromCharCode(8217) + 's-law based FPS sensitivity finder',
       menuTitle: 'Test Setup',
       game: 'Game',
       aspect: 'In-game aspect ratio',
       aspect43: '4:3 (incl. stretched)',
       aspect169: '16:9 native',
       customFov: 'Custom horizontal FOV (°)',
+      customYaw: 'Custom yaw (°/count, from your game conversion table)',
+      yawInvalid: 'yaw failed round-trip check, please verify',
       dpi: 'Mouse DPI',
       sens: 'In-game sensitivity',
       trialsPerCond: 'Trials per sensitivity condition',
@@ -181,35 +197,43 @@
       trackPlateau: 'Tracking optimal plateau',
       trackGlobalOpt: 'Tracking optimal interval',
       overlap: 'Plateau overlap:',
-      noOverlap: 'No overlap between the two plateaus; use the weight slider below to trade off by your playstyle',
+      noOverlap:
+        'No overlap between the two plateaus; use the weight slider below to trade off by your playstyle',
       combinedTitle: 'Combined recommendation (weighted by playstyle)',
       flickWeight: 'Flick weight',
       trackWeight: 'Tracking weight',
-      combinedNote: 'The slider blends flick/tracking optima; favor flick for rifling, favor tracking for spraying/beaming',
-      combinedAnchorNote: 'Your current setup is already inside the flick plateau — when measurement and long-term habit disagree but the difference is within the equivalence band, prefer keeping your current sensitivity',
-      trackUnreliable: 'Tracking curve fit is too wide (flat data or interference); it is excluded from the blend this time — conversions below use the flick result',
+      combinedNote:
+        'The slider blends flick/tracking optima; favor flick for rifling, favor tracking for spraying/beaming',
+      combinedAnchorNote:
+        'Your current setup is already inside the flick plateau — when measurement and long-term habit disagree but the difference is within the equivalence band, prefer keeping your current sensitivity',
+      trackUnreliable:
+        'Tracking curve fit is too wide (flat data or interference); it is excluded from the blend this time — conversions below use the flick result',
       chartTrack: 'Tracking RMS error vs sensitivity (lower is better)',
       trackDetail: 'Tracking per-condition details',
       trackRms: 'RMS error',
       trackOnTarget: 'Time on target',
       trackLag: 'Mean lag',
-      trackLagNote: 'Lag = mean delay of crosshair velocity peak vs target velocity peak; positive means you trail (raise sensitivity), near zero or negative means you keep up',
-      versionNote: 'SensZone v1.3 · © 2026 YMZS · All rights reserved',
+      trackLagNote:
+        'Lag = mean delay of crosshair velocity peak vs target velocity peak; positive means you trail (raise sensitivity), near zero or negative means you keep up',
+      versionNote: 'SensZone v' + SZ.VERSION + ' · © 2026 YMZS · All rights reserved',
       alignHint: 'Flick to the green target (timer starts when you move; no reaction penalty)',
       feedbackHit: 'Hit',
       feedbackMiss: 'Miss',
       feedbackTimeout: 'Timeout',
       feedbackIdle: 'No movement detected; trial skipped',
       feedbackSkip: 'Invalid start (crossed target while already moving), skipped',
-      plateauFlat: 'Sensitivities within this plateau differ by <8% after ID adjustment (statistically indistinguishable)',
+      plateauFlat:
+        'Sensitivities within this plateau differ by <8% after ID adjustment (statistically indistinguishable)',
       plateauIn: 'Already inside the optimal plateau; keep it or fine-tune by feel',
       plateauOut: 'Outside the plateau; consider moving toward it',
       adjMtShort: 'MT*',
-      adjNote: 'MT* is difficulty-adjusted (ANCOVA, reference ID=3.0 bits), removing per-condition target-difficulty luck',
+      adjNote:
+        'MT* is difficulty-adjusted (ANCOVA, reference ID=3.0 bits), removing per-condition target-difficulty luck',
       phaseTitle: 'Flick time decomposition (IEEE published Fig.13 protocol)',
       verifyShort: 'Verify',
       pauseShort: 'Pause',
-      phaseNote: 'Verify = time from last movement end to the shot; Pause = total gaps between submovements. The paper shows the cost of high sensitivity comes mostly from growing verify/pause time, not slower rotation \u2014 rising verify time with sensitivity means high sens makes you hesitate more',
+      phaseNote:
+        'Verify = time from last movement end to the shot; Pause = total gaps between submovements. The paper shows the cost of high sensitivity comes mostly from growing verify/pause time, not slower rotation \u2014 rising verify time with sensitivity means high sens makes you hesitate more',
       countdownNext: 'Next sensitivity',
       countdownHint: 'Press ESC anytime to pause',
       pauseTitle: 'Paused',
@@ -237,17 +261,23 @@
       diagnosis: 'Diagnosis & notes',
       warnings: 'Warnings',
       methodNote: 'Method',
-      methodText: 'Paradigm and statistics follow Boudaoud et al. (NVIDIA): discrete flick task, Shannon difficulty ID=log2(D/W+1), throughput ID/MT, first third of trials per condition discarded, randomized condition order, ANCOVA difficulty-adjusted MT with weighted fitting. The paper' + String.fromCharCode(8217) + 's population-optimal band 0.45–1.8 °/mm (20–80 cm/360) is a reference only; your personal interval is what this report measures.',
+      methodText:
+        'Paradigm and statistics follow Boudaoud et al. (NVIDIA): discrete flick task, Shannon difficulty ID=log2(D/W+1), throughput ID/MT, first third of trials per condition discarded, randomized condition order, ANCOVA difficulty-adjusted MT with weighted fitting. The paper' +
+        String.fromCharCode(8217) +
+        's population-optimal band 0.45–1.8 °/mm (20–80 cm/360) is a reference only; your personal interval is what this report measures.',
       paperBand: 'Paper population band: 20–80 cm/360',
       constraint: 'Physical constraint check',
       constraintOk: 'A 180° turn needs ~{d} cm = {p}% of pad width, within the 45% rule of thumb',
-      constraintBad: 'A 180° turn needs ~{d} cm = {p}% of pad width, above the 45% rule of thumb: raise sensitivity or get a bigger pad',
+      constraintBad:
+        'A 180° turn needs ~{d} cm = {p}% of pad width, above the 45% rule of thumb: raise sensitivity or get a bigger pad',
       constraintSkip: 'No pad width given; check skipped',
       retryBtn: 'Test again',
       backMenu: 'Back to menu',
       exportBtn: 'Export JSON',
+      exportPngBtn: 'Export Image',
       history: 'History',
       historyEmpty: 'No history yet',
+      trendEmpty: 'Complete ≥2 tests to see the trend',
       minutes: 'Estimated duration ~{m} min',
       hitRateShort: 'Hit rate',
       mtShort: 'Mean MT',
@@ -255,25 +285,31 @@
       tpShort: 'Throughput',
       subShort: 'Submov.',
       swipShort: 'swipiness',
-      swipNote: 'swipiness = shot time / first-submovement peak-velocity time / 2 (SPAR protocol): 0.5 \u2248 fire on the fly (swipe), \u22651 \u2248 flick-and-land',
+      swipNote:
+        'swipiness = shot time / first-submovement peak-velocity time / 2 (SPAR protocol): 0.5 \u2248 fire on the fly (swipe), \u22651 \u2248 flick-and-land',
       flickStyle: 'Flick style',
       styleSwipe: 'Fire on the fly (swipe, favors higher sensitivity)',
       styleMixed: 'Mixed',
       styleLand: 'Flick-and-land (favors lower sensitivity)',
-      roleNote: 'Role profile (NVIDIA paper \u00a75.2): close-range entry roles see low-ID tasks and favor higher sensitivity; long-range anchors see high-ID tasks and favor lower \u2014 set the slider by your main engagement range',
-      trackLagSummary: 'Mean aim lag {lag} ms (direction-change response) \u2014 positive means the crosshair trails the target',
+      roleNote:
+        'Role profile (NVIDIA paper \u00a75.2): close-range entry roles see low-ID tasks and favor higher sensitivity; long-range anchors see high-ID tasks and favor lower \u2014 set the slider by your main engagement range',
+      trackLagSummary:
+        'Mean aim lag {lag} ms (direction-change response) \u2014 positive means the crosshair trails the target',
       overShort: 'Overshoot',
       insufficient: 'Insufficient data',
       noFit: 'Curve fit unclear; empirical best shown',
       lowConfidence: 'Low confidence',
       anchor: 'Anchor',
-      discardedNote: 'First third of trials per condition discarded per protocol (short-term learning)',
+      discardedNote:
+        'First third of trials per condition discarded per protocol (short-term learning)',
       condExcluded: 'Condition {cm} cm/360 excluded from fitting (hit rate {hr}%)',
-      overallHitRate: 'Overall hit rate {hr}% is below the protocol target (85%); results are indicative only',
-      rawInputWarn: 'Browser did not confirm raw (unadjusted) mouse input; values may be biased by OS acceleration',
+      overallHitRate:
+        'Overall hit rate {hr}% is below the protocol target (85%); results are indicative only',
+      rawInputWarn:
+        'Browser did not confirm raw (unadjusted) mouse input; values may be biased by OS acceleration',
       aborted: 'Aborted',
-      dataUseNote: 'Validate in deathmatch for 1–2 weeks before finalizing'
-    }
+      dataUseNote: 'Validate in deathmatch for 1–2 weeks before finalizing',
+    },
   };
 
   let lang = 'zh-CN';
@@ -282,7 +318,9 @@
     if (STR[l]) lang = l;
   }
 
-  function getLang() { return lang; }
+  function getLang() {
+    return lang;
+  }
 
   function t(key, vars) {
     let s = (STR[lang] && STR[lang][key]) || STR['en'][key] || key;
@@ -295,4 +333,8 @@
   }
 
   SZ.i18n = { setLang, getLang, t };
-})(typeof window !== 'undefined' ? (window.SZ = window.SZ || {}) : (globalThis.SZ = globalThis.SZ || {}));
+})(
+  typeof window !== 'undefined'
+    ? (window.SZ = window.SZ || {})
+    : (globalThis.SZ = globalThis.SZ || {}),
+);
