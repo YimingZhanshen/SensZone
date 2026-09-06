@@ -50,8 +50,12 @@ function rewriteReadme(version) {
 
 function rewritePackageJson(version) {
   const before = read(PACKAGE_JSON);
-  if (!/"version"\s*:\s*"[^"]+"/.test(before)) throw new Error('package.json 中未找到 version 字段');
-  fs.writeFileSync(PACKAGE_JSON, before.replace(/("version"\s*:\s*")[^"]+(")/, '$1' + version + '$2'));
+  if (!/"version"\s*:\s*"[^"]+"/.test(before))
+    throw new Error('package.json 中未找到 version 字段');
+  fs.writeFileSync(
+    PACKAGE_JSON,
+    before.replace(/("version"\s*:\s*")[^"]+(")/, '$1' + version + '$2'),
+  );
 }
 
 function check() {
