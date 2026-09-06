@@ -4,7 +4,7 @@
 
 基于运动学分析与 Fitts 定律的 FPS 灵敏度区间查找器。任务范式与统计口径对齐 NVIDIA 论文《Mouse Sensitivity Effects in First-Person Targeting Tasks》（Boudaoud et al.）。
 
-**© 2026 YMZS** · 个人使用与内容创作免费；修改再分发需署名原作者（"Based on SensZone by YMZS"）；商用需授权。详见 [LICENSE](LICENSE)（场景内含 YMZS 水印与版权标识）。
+**© 2026 YMZS** · 个人使用与内容创作免费；修改再分发需署名原作者、同协议开源并附完整源码，改进优先提 Pull Request 回上游；商用需授权。详见 [LICENSE](LICENSE)（场景内含 YMZS 水印与版权标识）。
 
 输出**个人最优灵敏度平台区间**（甩枪/跟枪双任务画像），而不是伪精确的单点数值。
 

@@ -1,6 +1,6 @@
 SensZone（灵敏域）软件许可协议
 
-版权所有 © 2026 YMZS。协议版本 2.0（2026-09-06）。
+版权所有 © 2026 YMZS。协议版本 2.1（2026-09-06）。
 
 一、定义
 
@@ -20,7 +20,14 @@ SensZone（灵敏域）软件许可协议
    a) 在用户可见界面（如关于页、页脚或启动画面）的显著位置声明原始作者与项目来源，
       例如："Based on SensZone by YMZS（原作者 YMZS）"；
    b) 明确标注修改者身份与主要修改内容；
-   c) 不得使用 "SensZone 灵敏域" 的名称与标识进行可能引起来源混淆的传播。
+   c) 不得使用 "SensZone 灵敏域" 的名称与标识进行可能引起来源混淆的传播；
+   d) 【同协议开源】向任何第三方分发修改版（或任何包含本软件代码的衍生作品）时，
+      必须整体适用本协议，并向接收者提供完整的对应源代码；
+      不得以闭源形式分发，不得附加比本协议更严格的再限制条款。
+3. 【上游贡献优先】基于本软件的改进，首选以 Pull Request 形式提交回原仓库
+   （https://github.com/YimingZhanshen/SensZone/pulls），而非另立分支分发；
+   向原仓库提交的任何贡献（代码、文档、界面文案等）视为贡献者同意原作者将该贡献
+   并入本软件，并按本协议（含未来版本）使用与分发。
 3. 在视频、直播、图文等内容创作中展示本软件界面不属于商用，无需额外授权；
    自愿标注来源（https://senszone.yimingzhanshen.cn/）是对原作者最好的支持。
 
@@ -48,5 +55,7 @@ https://github.com/YimingZhanshen/SensZone/issues
 
 Copyright © 2026 YMZS. All rights reserved.
 Free to use, modify and redistribute with attribution ("Based on SensZone by YMZS").
+Modified versions must be released under the same license, with full source code.
+Upstream Pull Requests are welcome and preferred over forks.
 Commercial use requires prior written permission.
 Showing the software in videos, streams or articles is not commercial use.
