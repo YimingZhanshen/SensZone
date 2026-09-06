@@ -12,11 +12,11 @@
 
 ## 界面预览
 
-| 测试中（甩枪） | 测试中（跟枪） |
-| :---: | :---: |
-| ![甩枪任务](docs/screenshots/testing-flick.png) | ![跟枪任务](docs/screenshots/testing-track.png) |
-| **报告总览与综合推荐** | **诊断图表** |
-| ![报告总览](docs/screenshots/report-overview.png) | ![诊断图表](docs/screenshots/report-charts.png) |
+| 菜单 | 测试中（甩枪） | 测试中（跟枪） |
+| :---: | :---: | :---: |
+| ![菜单](docs/screenshots/menu.png) | ![甩枪任务](docs/screenshots/testing-flick.png) | ![跟枪任务](docs/screenshots/testing-track.png) |
+| **报告总览与综合推荐** | **诊断图表** | |
+| ![报告总览](docs/screenshots/report-overview.png) | ![诊断图表](docs/screenshots/report-charts.png) | |
 
 更多报告细节（四相时间分解 / 端点误差 / 风格画像）见 `docs/USER-MANUAL.md`。
 
