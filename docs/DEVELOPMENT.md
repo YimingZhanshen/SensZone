@@ -3,7 +3,7 @@
 ## 项目开发文档（设计定稿 v1.0）
 
 > 日期：2026-09-04
-> 依据：代码审查（PSA-Source-Engine `index.html` 437 行）+ 论文《Mouse Sensitivity Effects in First-Person Targeting Tasks》（Boudaoud et al., NVIDIA，已入库 SensZone 知识库并逐条核实）+ 两份外部 AI 意见的裁决结果
+> 依据：代码审查（PSA-Source-Engine `index.html` 437 行）+ 论文《Mouse Sensitivity in First-Person Targeting Tasks》（B. Boudaoud, J. Spjut, J. Kim, IEEE Transactions on Games, vol. 15, no. 4, pp. 493-506, 2023, doi: 10.1109/TG.2023.3293692；已入库 SensZone 知识库并逐条核实）+ 两份外部 AI 意见的裁决结果
 > 状态：M0（MVP）已实现并通过冒烟测试（`node test/smoke.cjs`，32 项断言）
 
 ---

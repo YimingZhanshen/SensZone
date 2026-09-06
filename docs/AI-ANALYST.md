@@ -23,7 +23,7 @@
 - 每个 session 测 6 个灵敏度条件（锚点 ×0.3/0.44/0.67/1.0/1.5/2.25 对数间隔），每条件丢弃前 1/3 热身试次。
 - 完成时间 MT 经 ANCOVA 难度归一（ID=3.0 bits 基准），二次拟合后给出最优 cm/360 与
   置信区间，并检测"平台区间"（成绩 ≤ 最优 ×1.08 的等价带）——结论以平台为准而非单点。
-- 方法论对齐论文：Boudaoud et al.《Mouse Sensitivity Effects in First-Person Targeting Tasks》。
+- 方法论对齐论文：B. Boudaoud, J. Spjut and J. Kim, "Mouse Sensitivity in First-Person Targeting Tasks," IEEE Transactions on Games, vol. 15, no. 4, pp. 493-506, 2023（doi: 10.1109/TG.2023.3293692）。
 
 【解读硬规则——逐条遵守】
 1. 平台区间（plateau.lo–hi）优先于点估计（global.optCm360）：平台内的档位统计等价，

@@ -8,7 +8,7 @@
 [![i18n](https://img.shields.io/badge/i18n-zh--CN%20%7C%20en-informational)](src/i18n.js)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
-基于运动学分析与 Fitts 定律的 FPS 灵敏度区间查找器。任务范式与统计口径对齐 NVIDIA 论文《Mouse Sensitivity Effects in First-Person Targeting Tasks》（Boudaoud et al.）。
+基于运动学分析与 Fitts 定律的 FPS 灵敏度区间查找器。任务范式与统计口径逐条对齐 NVIDIA Research 论文——B. Boudaoud, J. Spjut and J. Kim, "Mouse Sensitivity in First-Person Targeting Tasks," *IEEE Transactions on Games*, vol. 15, no. 4, pp. 493-506, Dec. 2023（[DOI: 10.1109/TG.2023.3293692](https://doi.org/10.1109/TG.2023.3293692) · [NVIDIA Research 页面](https://research.nvidia.com/publication/2023-07_mouse-sensitivity-first-person-targeting-tasks) · [作者版 PDF](https://d1qx31qr3h6wln.cloudfront.net/publications/IEEE_T_Games__Mouse_Sensitivity.pdf?VersionId=dgFWwRKSaHqyCoJyPI1pI5aRzqkm9LmS)）。
 
 **© 2026 YMZS** · 个人使用与内容创作免费；修改再分发需署名原作者、同协议开源并附完整源码，改进优先提 Pull Request 回上游；商用需授权。详见 [LICENSE](LICENSE)（场景内含 YMZS 水印与版权标识）。
 
