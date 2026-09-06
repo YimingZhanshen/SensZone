@@ -15,6 +15,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const VERSION_JS = path.join(ROOT, 'src', 'version.js');
 const INDEX_HTML = path.join(ROOT, 'index.html');
 const README_MD = path.join(ROOT, 'README.md');
+const PACKAGE_JSON = path.join(ROOT, 'package.json');
 
 const read = (p) => fs.readFileSync(p, 'utf8');
 
@@ -47,6 +48,12 @@ function rewriteReadme(version) {
   fs.writeFileSync(README_MD, before.replace(/^(# SensZone（灵敏域）)v[\d.]+/m, '$1v' + version));
 }
 
+function rewritePackageJson(version) {
+  const before = read(PACKAGE_JSON);
+  if (!/"version"\s*:\s*"[^"]+"/.test(before)) throw new Error('package.json 中未找到 version 字段');
+  fs.writeFileSync(PACKAGE_JSON, before.replace(/("version"\s*:\s*")[^"]+(")/, '$1' + version + '$2'));
+}
+
 function check() {
   const v = versionFromVersionJs();
   const problems = [];
@@ -66,11 +73,14 @@ function check() {
   const title = read(README_MD).match(/^# SensZone（灵敏域）v([^ \n]+)/m);
   if (!title) problems.push('README.md 标题缺少版本号');
   else if (title[1] !== v) problems.push('README.md 标题 v' + title[1] + ' ≠ version.js ' + v);
+  const pkg = read(PACKAGE_JSON).match(/"version"\s*:\s*"([^"]+)"/);
+  if (!pkg) problems.push('package.json 缺少 version 字段');
+  else if (pkg[1] !== v) problems.push('package.json version ' + pkg[1] + ' ≠ version.js ' + v);
   if (problems.length) {
     console.error('版本不一致：\n  - ' + problems.join('\n  - '));
     process.exit(1);
   }
-  console.log('版本一致：v' + v + '（version.js / index.html ?v= / README 标题）');
+  console.log('版本一致：v' + v + '（version.js / index.html ?v= / README 标题 / package.json）');
 }
 
 const arg = process.argv[2];
@@ -80,6 +90,7 @@ if (arg === '--check') {
   rewriteVersionJs(arg);
   rewriteIndexHtml(arg);
   rewriteReadme(arg);
+  rewritePackageJson(arg);
   console.log('已统一版本号：v' + arg);
   check();
 } else {

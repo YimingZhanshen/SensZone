@@ -1,6 +1,12 @@
 # SensZone（灵敏域）v1.4.1
 
 [![CI](https://github.com/YimingZhanshen/SensZone/actions/workflows/ci.yml/badge.svg)](https://github.com/YimingZhanshen/SensZone/actions/workflows/ci.yml)
+[![version](https://img.shields.io/github/v/tag/YimingZhanshen/SensZone?sort=semver&label=version&color=00ffcc)](https://github.com/YimingZhanshen/SensZone/tags)
+[![license](https://img.shields.io/badge/license-署名--同协议--商用需授权-blue)](LICENSE)
+[![dependencies](https://img.shields.io/badge/dependencies-零运行时依赖-brightgreen)](src/)
+[![PWA](https://img.shields.io/badge/PWA-可安装·离线可用-5A0FC8)](#可安装--离线使用)
+[![i18n](https://img.shields.io/badge/i18n-zh--CN%20%7C%20en-informational)](src/i18n.js)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
 基于运动学分析与 Fitts 定律的 FPS 灵敏度区间查找器。任务范式与统计口径对齐 NVIDIA 论文《Mouse Sensitivity Effects in First-Person Targeting Tasks》（Boudaoud et al.）。
 

@@ -1,7 +1,7 @@
 {
   "name": "senszone",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "SensZone（灵敏域）— FPS 灵敏度区间查找器（纯前端，零运行时依赖）",
   "scripts": {
     "lint": "eslint . && prettier --check \"src/**/*.js\" \"test/*.cjs\" \"scripts/*.mjs\" \"index.html\"",
