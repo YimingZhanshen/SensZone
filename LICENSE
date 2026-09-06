@@ -1,26 +1,52 @@
-SensZone（灵敏域）自定义软件许可协议
+SensZone（灵敏域）软件许可协议
 
-版权所有 © 2026 YMZS（联系方式：<contact@example.com>）。保留所有权利。
+版权所有 © 2026 YMZS。协议版本 2.0（2026-09-06）。
 
-一、授权范围
+一、定义
 
-1. 本协议允许任何人将本软件用于个人非商业用途，包括在官方部署地址在线使用，或本地运行未修改的副本。
-2. 允许在未修改、未再分发的前提下，向他人转发官方发布地址链接。
+1. "本软件"：SensZone（灵敏域）的源代码、构建产物、界面与随附文档。
+2. "原作者"：YMZS（本项目的唯一作者）。
+3. "商用"：以直接或间接营利为目的使用本软件，包括但不限于：出售、租赁、捆绑销售、以本软件为核心提供付费服务、在商业产品或商业宣传中集成。以下场景不属于商用：
+   a) 个人日常使用与本地运行；
+   b) 视频、直播、图文等内容创作中展示本软件界面（含内嵌水印与版权标识）；
+   c) 教学、评测等非营利用途。
 
-二、限制
+二、授权
 
-1. 禁止任何商业用途，包括但不限于：出售、租赁、捆绑销售、以本软件为核心提供付费服务或商业宣传。
-2. 禁止再分发本软件或其修改版本（包括源代码、构建产物与镜像部署），除非事先获得著作权人书面许可。
-3. 禁止移除、遮挡或修改软件界面内的版权标识（YMZS 水印与 © 声明）及本许可文件。
-4. 本软件按"现状"提供，不附带任何明示或默示的担保。使用本软件产生的任何直接或间接损失，著作权人不承担责任。
+在遵守本协议的前提下，任何人免费获得使用、复制、运行本软件的权利：
 
-三、其他
+1. 允许在线使用官方部署版本，或本地运行未修改的副本；未修改副本不得移除、遮挡或篡改软件界面内的版权标识与 YMZS 水印。
+2. 允许任何人（含公司与组织）修改本软件并分发修改版本，但修改版必须满足：
+   a) 在用户可见界面（如关于页、页脚或启动画面）的显著位置声明原始作者与项目来源，
+      例如："Based on SensZone by YMZS（原作者 YMZS）"；
+   b) 明确标注修改者身份与主要修改内容；
+   c) 不得使用 "SensZone 灵敏域" 的名称与标识进行可能引起来源混淆的传播。
+3. 在视频、直播、图文等内容创作中展示本软件界面不属于商用，无需额外授权；
+   自愿标注来源（https://senszone.yimingzhanshen.cn/）是对原作者最好的支持。
 
-商用、再分发、二次开发或其他授权需求，请通过上述联系方式与著作权人协商并取得书面许可。
+三、限制
+
+1. 商用必须事先获得原作者书面授权（见第六条联系方式洽谈）。
+2. 未经授权，不得将本软件或其修改版用于第一条约定的商用场景。
+3. 本软件按"现状"提供，不附带任何明示或默示的担保。因使用本软件产生的任何直接或
+   间接损失，原作者不承担责任。
+
+四、其他
+
+1. 本协议的授予不可撤销；原作者保留发布后续版本协议的权利，已分发副本继续受其发布
+   时协议约束。
+2. 本协议适用中华人民共和国法律。因本协议产生的争议，双方应先协商解决；协商不成的，
+   提交原作者所在地有管辖权的人民法院裁决。
+3. 如个别条款被认定无效，不影响其余条款的效力。
+
+五、联系
+
+商用授权、二次开发合作或其它许可事宜，请通过 GitHub Issues 联系原作者：
+https://github.com/YimingZhanshen/SensZone/issues
 
 ---
 
 Copyright © 2026 YMZS. All rights reserved.
-Personal non-commercial use only. Redistribution (in whole, in part, or modified) and
-commercial use are prohibited without prior written permission from the copyright holder.
-The software is provided "as is", without warranty of any kind.
+Free to use, modify and redistribute with attribution ("Based on SensZone by YMZS").
+Commercial use requires prior written permission.
+Showing the software in videos, streams or articles is not commercial use.
